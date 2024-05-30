@@ -1,5 +1,5 @@
 const editButton = document.querySelector(".profile__edit-button");
-const closeButton = document.querySelector(".popup__container__close-button");
+const closeButton = document.querySelector(".popup__container-close-button");
 const formElement = document.querySelector(".popup__container");
 const nameInput = document.querySelector("#name").value;
 const jobInput = document.querySelector("#job").value;
@@ -21,8 +21,11 @@ function closePopUp() {
   const userName = document.querySelector(".profile__name");
   const userJob = document.querySelector(".profile__job");
 
-  if (nameInput == "" && jobInput == "") {
+  if (nameInput === "") {
     userName.textContent = namePlaceholder;
+  }
+
+  if (jobInput === "") {
     userJob.textContent = jobPlaceholder;
   }
 

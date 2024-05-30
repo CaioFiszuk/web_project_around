@@ -1,9 +1,8 @@
 .profile {
-  margin: 40px 0 50px;
+  font-family: "Inter Regular";
+  margin: 40px auto 50px;
   display: flex;
   align-items: center;
-  max-width: 880px;
-  font-family: "Inter Regular";
 }
 
 .profile__info {
@@ -85,6 +84,11 @@
   .profile__name {
     font-size: 22px;
     line-height: 27px;
+  }
+
+  .profile__job {
+    font-size: 14px;
+    line-height: 17px;
   }
 
   .profile__add-button {
