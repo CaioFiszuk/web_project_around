@@ -39,6 +39,7 @@ const elementsTemplate = document.querySelector("#elements-template").content;
 initialCards.forEach((item) => {
   const element = elementsTemplate.querySelector(".element").cloneNode(true);
   element.querySelector(".element__image").src = item.link;
+  element.querySelector(".element__image").alt = item.name;
   element.querySelector(".element__title").textContent = item.name;
 
   element.querySelector(".element__image").addEventListener("click", () => {
