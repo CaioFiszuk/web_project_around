@@ -135,9 +135,39 @@ function handleElementFormSubmit(evt) {
   if (titleInput === "" || imageLinkInput === "") {
     closeCreatePopUp();
   } else {
+
+    initialCards.push({
+      name: titleInput,
+      link: imageLinkInput,
+    });
+
     const element = elementsTemplate.querySelector(".element").cloneNode(true);
     element.querySelector(".element__image").src = imageLinkInput;
+    element.querySelector(".element__image").alt = titleInput;
     element.querySelector(".element__title").textContent = titleInput;
+
+    element.querySelector(".element__image").addEventListener("click", () => {
+      const popup = document.querySelector("#image-popup");
+      const popupImage = document.querySelector(".popup__image");
+      const popupImageDescription = document.querySelector(
+        ".popup__image-description"
+      );
+
+      popupImage.src = imageLinkInput;
+      popupImageDescription.textContent = titleInput;
+
+      popup.classList.add("popup__opened");
+    });
+
+    element
+      .querySelector(".inactive-icon")
+      .addEventListener("click", handleLike);
+    element.querySelector(".active-icon").addEventListener("click", handleLike);
+
+    element.querySelector(".trash-can-icon").addEventListener("click", () => {
+      element.remove();
+    });
+
     elementsContainer.prepend(element);
 
     closeCreatePopUp();
