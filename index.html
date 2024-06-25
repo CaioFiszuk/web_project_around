@@ -93,7 +93,7 @@
         </section>
 
         <section class="popup" id="edit-popup">
-          <form class="popup__container">
+          <form class="popup__container" id="form-edit" novalidate>
             <fieldset class="popup__container-fieldset">
               <legend class="popup__container-title">Editar perfil</legend>
               <input
@@ -101,13 +101,21 @@
                 class="popup__container-input"
                 id="name"
                 placeholder="Jacques Costeau"
+                minlength="2"
+                maxlength="40"
+                required
               />
+              <span class="popup__container-error name-error"></span>
               <input
                 type="text"
                 class="popup__container-input"
                 id="job"
                 placeholder="Explorador"
+                minlength="2"
+                maxlength="200"
+                required
               />
+              <span class="popup__container-error job-error">aaa</span>
             </fieldset>
 
             <button class="popup__container-button" type="submit">
@@ -129,7 +137,7 @@
         </section>
 
         <section class="popup" id="create-popup">
-          <form id="form-create" class="popup__container">
+          <form id="form-create" class="popup__container" novalidate>
             <fieldset class="popup__container-fieldset">
               <legend class="popup__container-title">Novo local</legend>
               <input
@@ -137,13 +145,19 @@
                 class="popup__container-input"
                 id="title"
                 placeholder="Titulo"
+                minlength="2"
+                maxlength="30"
+                required
               />
+              <span class="popup__container-error title-error"></span>
               <input
-                type="text"
+                type="url"
                 class="popup__container-input"
                 id="image-link"
                 placeholder="Link de imagem"
+                required
               />
+              <span class="popup__container-error image-link-error"></span>
             </fieldset>
 
             <button class="popup__container-button" type="submit">Criar</button>

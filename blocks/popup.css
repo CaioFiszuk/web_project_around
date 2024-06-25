@@ -78,6 +78,10 @@
   padding-bottom: 13px;
 }
 
+.popup__container-input_type-error {
+  border-bottom: 1px solid #ff0000;
+}
+
 .popup__container-button {
   background-color: #000000;
   color: #ffffff;
@@ -92,6 +96,16 @@
 .popup__container-button:hover {
   background-color: #00000080;
   border: none;
+}
+
+.popup__container-button_inactive {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  color: #00000020;
+}
+
+.popup__container-error_active {
+  color: #ff0000;
 }
 
 .popup__container-close-button {
