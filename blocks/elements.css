@@ -34,6 +34,7 @@
 .element__description {
   background-color: #ffffff;
   color: #000000;
+  font-family: "Inter Bold";
   font-weight: 900;
   font-size: 24px;
   line-height: 29px;
@@ -62,13 +63,37 @@
   display: none;
 }
 
-@media screen and (max-width: 884px) {
+@media screen and (max-width: 1280px) {
   .elements {
-    grid-template-columns: repeat(2, minmax(318px, 385px));
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 767px) and (min-width: 320px) {
+@media screen and (min-width: 820px) and (max-width: 1279px) {
+  .elements {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 819px) {
+  .elements {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) and (min-width: 360px) {
+  .elements {
+    display: flex;
+    flex-direction: column;
+    margin: 0 19px;
+  }
+
+  .element {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 359px) and (min-width: 320px) {
   .elements {
     display: flex;
     flex-direction: column;

@@ -1,7 +1,5 @@
 .header {
-  border: 1px solid #000000;
   border-bottom: 1px solid #545454;
-  max-width: 880px;
 }
 
 .header__title {
@@ -13,8 +11,19 @@
   margin: 45px 0;
 }
 
-@media (max-width: 767px) and (min-width: 320px) {
+
+@media (max-width: 767px) and (min-width: 360px) {
+
   .header__logo {
     padding-left: 27px;
   }
+
+}
+
+@media (max-width: 359px) and (min-width: 320px) {
+
+  .header__logo {
+    padding-left: 27px;
+  }
+
 }
