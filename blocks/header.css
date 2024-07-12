@@ -1,5 +1,6 @@
 .header {
   border-bottom: 1px solid #545454;
+  width: 880px;
 }
 
 .header__title {
@@ -11,19 +12,28 @@
   margin: 45px 0;
 }
 
-
-@media (max-width: 767px) and (min-width: 360px) {
-
-  .header__logo {
-    padding-left: 27px;
+@media screen and (min-width: 768px) and (max-width: 911px) {
+  .header {
+    width: 590px;
   }
-
 }
 
-@media (max-width: 359px) and (min-width: 320px) {
+@media screen and (min-width: 360px) and (max-width: 767px) {
+  .header {
+    width: 100%;
+  }
 
   .header__logo {
     padding-left: 27px;
   }
+}
 
+@media screen and (min-width: 320px) and (max-width: 359px) {
+  .header {
+    width: 100%;
+  }
+
+  .header__logo {
+    padding-left: 27px;
+  }
 }

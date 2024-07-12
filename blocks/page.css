@@ -1,24 +1,26 @@
 .page {
   color: #ffffff;
   background-color: #000000;
-  max-width: 1440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 0 200px;
   font-family: "Inter Regular";
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 912px) {
   .page {
     padding: 0 50px;
   }
 }
 
-@media (max-width: 767px) and (min-width: 360px) {
+@media screen and (min-width: 360px) and (max-width: 767px) {
   .page {
     padding: 0;
   }
 }
 
-@media (max-width: 359px) and (min-width: 320px) {
+@media screen and (min-width: 320px) and (max-width: 359px) {
   .page {
     padding: 0;
   }
