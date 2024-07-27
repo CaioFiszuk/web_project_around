@@ -1,13 +1,14 @@
 export default class Card {
-  constructor(title, imageLink, elementSelector) {
+  constructor(title, imageLink, selector, handleCardClick) {
     this._title = title;
     this._imageLink = imageLink;
-    this._elementSelector = elementSelector;
+    this._selector = selector;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
     const element = document
-      .querySelector(this._elementSelector)
+      .querySelector(this._selector)
       .content.querySelector(".element")
       .cloneNode(true);
 
@@ -27,19 +28,6 @@ export default class Card {
     }
   }
 
-  _openPopupImage() {
-    const popup = document.querySelector("#image-popup");
-    const popupImage = document.querySelector(".popup__image");
-    const popupImageDescription = document.querySelector(
-      ".popup__image-description"
-    );
-
-    popupImage.src = this._imageLink;
-    popupImageDescription.textContent = this._title;
-
-    popup.classList.add("popup__opened");
-  }
-
   _closePopupImage(evt) {
     const popup = document.querySelector("#image-popup");
 
@@ -55,9 +43,7 @@ export default class Card {
   _setEventListeners() {
     this._element
       .querySelector(".element__image")
-      .addEventListener("click", () => {
-        this._openPopupImage();
-      });
+      .addEventListener("click", this._handleCardClick);
 
     document
       .querySelector("#image-close-button")

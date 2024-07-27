@@ -6,9 +6,6 @@
     <meta name="description" content="Travel app" />
     <meta name="author" content="Caio Fiszuk" />
     <meta name="keywords" content="explorador, montanha" />
-
-    <link rel="stylesheet" href="./pages/index.css" />
-
     <title>Around The U.S.</title>
   </head>
   <body>
@@ -16,35 +13,40 @@
       <header class="header">
         <h1 class="header__title">
           <img
-            src="./images/around-the-us.png"
+            src="<%= require('./images/around-the-us.png')%>"
             alt="Around The US Logo"
             class="header__logo"
+            id="logo"
           />
         </h1>
       </header>
+
       <main class="content">
         <section class="profile">
           <img
-            src="./images/avatar.png"
+            src="<%= require('./images/avatar.png')%>"
             alt="old man picture"
             class="profile__image"
+            id="avatar"
           />
           <div class="profile__info">
             <div class="profile__name-container">
               <h2 class="profile__name">Jacques Cousteau</h2>
               <img
-                src="./images/edit-sign.png"
+                src="<%= require('./images/edit-sign.png')%>"
                 alt="edit sign"
                 class="profile__edit-button"
+                id="edit-button"
               />
             </div>
             <p class="profile__job">Explorador</p>
           </div>
           <button type="button" class="profile__add-button">
             <img
-              src="./images/plus-sign.png"
+              src="<%= require('./images/plus-sign.png')%>"
               alt="plus sign"
               class="profile__add-button-icon"
+              id="add-button"
             />
           </button>
         </section>
@@ -54,22 +56,25 @@
         <template id="elements-template">
           <div class="element">
             <img
-              src="./images/trash-can.png"
+              src="<%= require('./images/trash-can.png')%>"
               alt="trash can icon"
               class="trash-can-icon"
+              id="trash-can"
             />
             <img class="element__image" />
             <div class="element__description">
               <p class="element__title"></p>
               <img
-                src="./images/like.png"
+                src="<%= require('./images/like.png')%>"
                 alt="heart icon"
                 class="element__icon inactive-icon"
+                id="heart"
               />
               <img
-                src="./images/like-dark.png"
+                src="<%= require('./images/like-dark.png')%>"
                 alt="dark heart icon"
                 class="element__icon active-icon dark-icon"
+                id="dark-heart"
               />
             </div>
           </div>
@@ -84,7 +89,7 @@
               type="button"
             >
               <img
-                src="./images/close-icon.png"
+                src="<%= require('./images/close-icon.png')%>"
                 alt="close icon"
                 class="popup__container-close-button-icon"
               />
@@ -129,9 +134,10 @@
               type="button"
             >
               <img
-                src="./images/close-icon.png"
+                src="<%= require('./images/close-icon.png')%>"
                 alt="close icon"
                 class="popup__container-close-button-icon"
+                id="image-close-button"
               />
             </button>
           </form>
@@ -169,9 +175,10 @@
               type="button"
             >
               <img
-                src="./images/close-icon.png"
+                src="<%= require('./images/close-icon.png')%>"
                 alt="close icon"
                 class="popup__container-close-button-icon"
+                id="image-close-button"
               />
             </button>
           </form>
@@ -179,7 +186,5 @@
       </main>
       <footer class="footer">&copy; 2021 Around The U.S.</footer>
     </div>
-
-    <script type="module" src="./scripts/script.js"></script>
   </body>
 </html>
