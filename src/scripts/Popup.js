@@ -1,12 +1,10 @@
-const popups = document.querySelectorAll(".popup");
-const closeButtons = document.querySelectorAll(
-  ".popup__container-close-button"
-);
-
 export default class Popup {
   constructor(selector) {
     this._selector = selector;
     this._popupElement = document.querySelector(this._selector);
+    this._closeButton = this._popupElement.querySelector(
+      ".popup__container-close-button"
+    );
   }
 
   open() {
@@ -24,22 +22,12 @@ export default class Popup {
   }
 
   setEventListeners() {
-    closeButtons.forEach((closeButton) => {
-      closeButton.addEventListener("click", () => {
-        this.close();
-      });
+    this._closeButton.addEventListener("click", () => {
+      this.close();
     });
 
     document.addEventListener("keydown", (evt) => {
       this._handleEscClose(evt);
-    });
-
-    popups.forEach((popup) => {
-      popup.addEventListener("click", (evt) => {
-        if (evt.currentTarget === evt.target) {
-          evt.currentTarget.classList.remove("popup__opened");
-        }
-      });
     });
   }
 }

@@ -1,16 +1,17 @@
-import "../pages/index.css";
 import Card from "./Card.js";
 import PopupWithImage from "./PopupWithImage.js";
 import PopUpWithForm from "./PopupWithForm.js";
 import UserInfo from "./UserInfo.js";
 import FormValidator from "./FormValidator.js";
 import Section from "./Section.js";
-import setEventListeners from "./utils.js";
 
 const formCreate = document.querySelector("#form-create");
 const formEdit = document.querySelector("#form-edit");
 const imageElement = document.querySelector(".popup__image");
 const titleElement = document.querySelector(".popup__image-description");
+const editButton = document.querySelector(".profile__edit-button");
+const addButton = document.querySelector(".profile__add-button");
+const popups = document.querySelectorAll(".popup");
 
 const initialCards = [
   {
@@ -143,4 +144,18 @@ export function handleElementFormSubmit(evt) {
   popupFormCreate.close();
 }
 
-setEventListeners();
+editButton.addEventListener("click", () => {
+  popupFormEdit.open();
+});
+
+addButton.addEventListener("click", () => {
+  popupFormCreate.open();
+});
+
+popups.forEach((popup) => {
+  popup.addEventListener("click", (evt) => {
+    if (evt.currentTarget === evt.target) {
+      evt.currentTarget.classList.remove("popup__opened");
+    }
+  });
+});
