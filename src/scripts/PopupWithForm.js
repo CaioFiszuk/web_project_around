@@ -7,13 +7,11 @@ export default class PopUpWithForm extends Popup {
   }
 
   _getInputValues() {
-    const firstValue = document.querySelector(this._selector).children[0][1]
-      .value;
+    const firstValue = document.querySelector(this._selector).children[0][1];
 
-    const secondValue = document.querySelector(this._selector).children[0][2]
-      .value;
+    const secondValue = document.querySelector(this._selector).children[0][2];
 
-    const inputValues = [firstValue, secondValue];
+    const inputValues = [firstValue.value, secondValue.value];
 
     return inputValues;
   }
@@ -27,13 +25,11 @@ export default class PopUpWithForm extends Popup {
   close() {
     super.close();
 
-    const firstValue = document.querySelector(this._selector).children[0][1]
-      .value;
+    const firstValue = document.querySelector(this._selector).children[0][1];
 
-    const secondValue = document.querySelector(this._selector).children[0][2]
-      .value;
+    const secondValue = document.querySelector(this._selector).children[0][2];
 
-    firstValue = this._getInputValues()[0];
-    secondValue = this._getInputValues()[1];
+    firstValue.value = this._getInputValues()[0];
+    secondValue.value = this._getInputValues()[1];
   }
 }
