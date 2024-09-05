@@ -1,9 +1,24 @@
+import PopupWithConfirmation from "./PopupWithConfirmation.js";
+
 export default class Card {
-  constructor(title, imageLink, selector, handleCardClick) {
+  constructor(
+    item,
+    title,
+    imageLink,
+    likesQuantity,
+    selector,
+    handleCardClick,
+    handleLikeQuantity,
+    handleCardDelete
+  ) {
+    this._item = item;
     this._title = title;
     this._imageLink = imageLink;
+    this._likesQuantity = likesQuantity;
     this._selector = selector;
     this._handleCardClick = handleCardClick;
+    this._handleLikeQuantity = handleLikeQuantity;
+    this._handleCardDelete = handleCardDelete;
   }
 
   _getTemplate() {
@@ -15,16 +30,24 @@ export default class Card {
     return element;
   }
 
-  _handleLike(evt) {
+  setLikesQuantity(likesQuantity) {
+    this._likesQuantity = likesQuantity;
+    this._element.querySelector(".element__likes-quantity").textContent =
+      this._likesQuantity;
+  }
+
+  handleLike(evt) {
     const inactiveIcon = evt.target.classList.contains("inactive-icon");
     const activeIcon = evt.target.classList.contains("active-icon");
 
     if (inactiveIcon) {
       evt.target.style.display = "none";
       evt.target.nextElementSibling.style.display = "inline";
+      return true;
     } else if (activeIcon) {
       evt.target.style.display = "none";
       evt.target.previousElementSibling.style.display = "inline";
+      return false;
     }
   }
 
@@ -36,8 +59,10 @@ export default class Card {
     }
   }
 
-  _removeCard() {
-    this._element.remove();
+  trashCan(firstId, secondId) {
+    if (firstId !== secondId) {
+      this._element.querySelector(".trash-can-icon").classList.add("dark-icon");
+    }
   }
 
   _setEventListeners() {
@@ -57,21 +82,28 @@ export default class Card {
 
     this._element
       .querySelector(".inactive-icon")
-      .addEventListener("click", (evt) => {
-        this._handleLike(evt);
-      });
+      .addEventListener("click", (evt) => this._handleLikeQuantity(evt));
 
     this._element
       .querySelector(".active-icon")
-      .addEventListener("click", (evt) => {
-        this._handleLike(evt);
-      });
+      .addEventListener("click", (evt) => this._handleLikeQuantity(evt));
+
+    const confirmation = new PopupWithConfirmation("#confirmation-popup");
+    const confirmButton = document.querySelector("#confirmation-button");
 
     this._element
       .querySelector(".trash-can-icon")
       .addEventListener("click", () => {
-        this._removeCard();
+        confirmation.open();
+
+        confirmButton.addEventListener("click", () => {
+          this._handleCardDelete();
+          this._element.remove();
+          confirmation.close();
+        });
       });
+
+    confirmation.setEventListeners();
   }
 
   generateCard() {
@@ -85,6 +117,21 @@ export default class Card {
     this._element.querySelector(".element__image").alt = this._title;
 
     this._element.querySelector(".element__title").textContent = this._title;
+
+    this._element.querySelector(".element__likes-quantity").textContent =
+      this._likesQuantity;
+
+    const activeIcon = this._element.querySelector(".active-icon");
+    const inactiveIcon = this._element.querySelector(".inactive-icon");
+
+    const isUserLiked = this._item.likes?.some((like) => {
+      return like._id === this._item.owner._id;
+    });
+
+    if (isUserLiked) {
+      activeIcon.classList.remove("dark-icon");
+      inactiveIcon.classList.add("dark-icon");
+    }
 
     elementsContainer.prepend(this._element);
   }

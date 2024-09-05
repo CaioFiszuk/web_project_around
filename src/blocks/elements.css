@@ -55,6 +55,12 @@
   overflow: hidden;
 }
 
+.element__likes-quantity {
+  position: absolute;
+  right: 23px;
+  bottom: 0;
+}
+
 .element__icon:hover {
   filter: brightness(0);
   opacity: 0.5;

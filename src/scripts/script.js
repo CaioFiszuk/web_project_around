@@ -5,6 +5,7 @@ import PopUpWithForm from "./PopupWithForm.js";
 import UserInfo from "./UserInfo.js";
 import FormValidator from "./FormValidator.js";
 import Section from "./Section.js";
+import { api } from "./Api.js";
 
 const formCreate = document.querySelector("#form-create");
 const formEdit = document.querySelector("#form-edit");
@@ -12,58 +13,73 @@ const imageElement = document.querySelector(".popup__image");
 const titleElement = document.querySelector(".popup__image-description");
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
+const profileImage = document.querySelector(".profile__image-container");
 const popups = document.querySelectorAll(".popup");
 
-const initialCards = [
-  {
-    name: "Vale de Yosemite",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-  },
-  {
-    name: "Lago Louise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
-  },
-  {
-    name: "Montanhas Carecas",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_bald-mountains.jpg",
-  },
-  {
-    name: "Latemar",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_latemar.jpg",
-  },
-  {
-    name: "Parque Nacional da Vanoise ",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_vanoise.jpg",
-  },
-  {
-    name: "Lago di Braies",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg",
-  },
-];
+const userInfo = new UserInfo({
+  nameSelector: ".profile__name",
+  aboutSelector: ".profile__about",
+  avatarSelector: ".profile__image",
+});
 
-const cardList = new Section(
-  {
-    items: initialCards,
-    renderer: (item) => {
-      const popupImage = new PopupWithImage(
-        titleElement,
-        imageElement,
-        "#image-popup"
-      );
+let userData = {};
 
-      const card = new Card(item.name, item.link, "#elements-template", () =>
-        popupImage.open(item.name, item.link)
-      );
+api.getUserInfo().then((data) => {
+  userInfo.setUserInfo(data);
+  userInfo.setAvatar(data.avatar);
+  userData = data;
+});
 
-      const cardElement = card.generateCard();
+api.getInitialCards().then((data) => {
+  const cardList = new Section(
+    {
+      items: data,
+      renderer: (item) => {
+        const popupImage = new PopupWithImage(
+          titleElement,
+          imageElement,
+          "#image-popup"
+        );
 
-      cardList.addItem(cardElement);
+        const card = new Card(
+          item,
+          item.name,
+          item.link,
+          item.likes.length,
+          "#elements-template",
+          () => popupImage.open(item.name, item.link),
+
+          (evt) => {
+            const isLiked = card.handleLike(evt);
+
+            if (isLiked) {
+              api.toLike(item._id).then((response) => {
+                const data = response.likes;
+                card.setLikesQuantity(data.length);
+              });
+            } else {
+              api.toDislike(item._id).then((response) => {
+                const data = response.likes;
+                card.setLikesQuantity(data.length);
+              });
+            }
+          },
+
+          () => api.deleteCard(item._id)
+        );
+
+        const cardElement = card.generateCard();
+
+        card.trashCan(userData._id, item.owner._id);
+
+        cardList.addItem(cardElement);
+      },
     },
-  },
-  "#elements-template"
-);
+    "#elements-template"
+  );
 
-cardList.renderer();
+  cardList.renderer();
+});
 
 const formEditValidator = new FormValidator(
   {
@@ -90,59 +106,110 @@ const formCreateValidator = new FormValidator(
 formEditValidator.enableValidation();
 formCreateValidator.enableValidation();
 
-const popupFormEdit = new PopUpWithForm(handleProfileFormSubmit, "#edit-popup");
+const popupFormEdit = new PopUpWithForm(
+  handleProfileFormSubmit,
+  "#edit-popup",
+  ".popup__container-button"
+);
 
 const popupFormCreate = new PopUpWithForm(
   handleElementFormSubmit,
-  "#create-popup"
+  "#create-popup",
+  ".popup__container-button"
+);
+
+const popupFormAvatar = new PopUpWithForm(
+  handleAvatarUpdate,
+  "#avatar-popup",
+  ".popup__container-button"
 );
 
 popupFormEdit.setEventListeners();
 popupFormCreate.setEventListeners();
+popupFormAvatar.setEventListeners();
 
-export function handleProfileFormSubmit(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault();
+
+  popupFormEdit.setLoading();
 
   const nameInput = document.querySelector("#name").value;
   const jobInput = document.querySelector("#job").value;
 
-  const userName = document.querySelector(".profile__name");
-  const userJob = document.querySelector(".profile__job");
-
-  const userInfo = new UserInfo({ userName, userJob });
-
-  userInfo.setUserInfo(nameInput, jobInput);
-
-  popupFormEdit.close();
+  api.editProfile(nameInput, jobInput).then(() => {
+    userInfo.setUserInfo(nameInput, jobInput);
+    api.getUserInfo().then((data) => {
+      userInfo.setUserInfo(data);
+      userInfo.getUserInfo();
+    });
+    popupFormEdit.setLoading();
+    popupFormEdit.close();
+  });
 }
 
-export function handleElementFormSubmit(evt) {
+function handleElementFormSubmit(evt) {
   evt.preventDefault();
+
+  popupFormCreate.setLoading();
 
   const titleInput = document.querySelector("#title").value;
   const imageLinkInput = document.querySelector("#image-link").value;
 
-  initialCards.push({
-    name: titleInput,
-    link: imageLinkInput,
+  api.addCard(titleInput, imageLinkInput).then((data) => {
+    const popupImage = new PopupWithImage(
+      titleElement,
+      imageElement,
+      "#image-popup"
+    );
+
+    const element = new Card(
+      data,
+      titleInput,
+      imageLinkInput,
+      "0",
+      "#elements-template",
+      () => popupImage.open(titleInput, imageLinkInput),
+
+      (evt) => {
+        const isLiked = element.handleLike(evt);
+
+        if (isLiked) {
+          api.toLike(data._id).then((response) => {
+            const data = response.likes;
+            element.setLikesQuantity(data.length);
+          });
+        } else {
+          api.toDislike(data._id).then((response) => {
+            const data = response.likes;
+            element.setLikesQuantity(data.length);
+          });
+        }
+      },
+
+      () => api.deleteCard(data._id)
+    );
+
+    popupFormCreate.setLoading();
+
+    element.generateCard();
+    element.trashCan(userData._id, data.owner._id);
+
+    popupFormCreate.close();
   });
+}
 
-  const popupImage = new PopupWithImage(
-    titleElement,
-    imageElement,
-    "#image-popup"
-  );
+function handleAvatarUpdate(evt) {
+  evt.preventDefault();
 
-  const element = new Card(
-    titleInput,
-    imageLinkInput,
-    "#elements-template",
-    () => popupImage.open(titleInput, imageLinkInput)
-  );
+  popupFormAvatar.setLoading();
 
-  element.generateCard();
+  const avatarLink = document.querySelector("#avatar-link").value;
 
-  popupFormCreate.close();
+  api.updateAvatar(avatarLink).then(() => {
+    userInfo.setAvatar(avatarLink);
+    popupFormAvatar.setLoading();
+    popupFormAvatar.close();
+  });
 }
 
 editButton.addEventListener("click", () => {
@@ -151,6 +218,10 @@ editButton.addEventListener("click", () => {
 
 addButton.addEventListener("click", () => {
   popupFormCreate.open();
+});
+
+profileImage.addEventListener("click", () => {
+  popupFormAvatar.open();
 });
 
 popups.forEach((popup) => {
