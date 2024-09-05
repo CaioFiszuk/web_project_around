@@ -22,18 +22,19 @@ const userInfo = new UserInfo({
   avatarSelector: ".profile__image",
 });
 
-let userData = {};
+//let userData = {};
+const userData = "61deba0ec5525e755b8d1397";
 
 api.getUserInfo().then((data) => {
   userInfo.setUserInfo(data);
   userInfo.setAvatar(data.avatar);
-  userData = data;
+  //userData = data;
 });
 
 api.getInitialCards().then((data) => {
   const cardList = new Section(
     {
-      items: data,
+      items: data.reverse(),
       renderer: (item) => {
         const popupImage = new PopupWithImage(
           titleElement,
@@ -65,12 +66,13 @@ api.getInitialCards().then((data) => {
             }
           },
 
-          () => api.deleteCard(item._id)
+          (cardId) => api.deleteCard(cardId)
         );
 
         const cardElement = card.generateCard();
 
-        card.trashCan(userData._id, item.owner._id);
+        //card.trashCan(userData._id, item.owner._id);
+        card.trashCan(userData, item.owner._id);
 
         cardList.addItem(cardElement);
       },
@@ -150,6 +152,10 @@ function handleProfileFormSubmit(evt) {
 function handleElementFormSubmit(evt) {
   evt.preventDefault();
 
+  /*api.getUserInfo().then((data) => {
+    userData = data;
+  });*/
+
   popupFormCreate.setLoading();
 
   const titleInput = document.querySelector("#title").value;
@@ -186,13 +192,15 @@ function handleElementFormSubmit(evt) {
         }
       },
 
-      () => api.deleteCard(data._id)
+      (cardId) => api.deleteCard(cardId)
     );
 
     popupFormCreate.setLoading();
 
     element.generateCard();
-    element.trashCan(userData._id, data.owner._id);
+
+    //element.trashCan(userData._id, data.owner._id);
+    element.trashCan(userData, data.owner._id);
 
     popupFormCreate.close();
   });

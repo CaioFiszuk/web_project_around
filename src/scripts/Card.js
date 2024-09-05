@@ -59,8 +59,8 @@ export default class Card {
     }
   }
 
-  trashCan(firstId, secondId) {
-    if (firstId !== secondId) {
+  trashCan(userId, cardOwnerId) {
+    if (userId !== cardOwnerId) {
       this._element.querySelector(".trash-can-icon").classList.add("dark-icon");
     }
   }
@@ -97,9 +97,11 @@ export default class Card {
         confirmation.open();
 
         confirmButton.addEventListener("click", () => {
-          this._handleCardDelete();
-          this._element.remove();
-          confirmation.close();
+          if (this._item.owner._id === "61deba0ec5525e755b8d1397") {
+            this._handleCardDelete(this._item._id);
+            this._element.remove();
+            confirmation.close();
+          }
         });
       });
 
