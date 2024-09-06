@@ -22,13 +22,11 @@ const userInfo = new UserInfo({
   avatarSelector: ".profile__image",
 });
 
-//let userData = {};
 const userData = "61deba0ec5525e755b8d1397";
 
 api.getUserInfo().then((data) => {
   userInfo.setUserInfo(data);
   userInfo.setAvatar(data.avatar);
-  //userData = data;
 });
 
 api.getInitialCards().then((data) => {
@@ -71,7 +69,6 @@ api.getInitialCards().then((data) => {
 
         const cardElement = card.generateCard();
 
-        //card.trashCan(userData._id, item.owner._id);
         card.trashCan(userData, item.owner._id);
 
         cardList.addItem(cardElement);
@@ -152,10 +149,6 @@ function handleProfileFormSubmit(evt) {
 function handleElementFormSubmit(evt) {
   evt.preventDefault();
 
-  /*api.getUserInfo().then((data) => {
-    userData = data;
-  });*/
-
   popupFormCreate.setLoading();
 
   const titleInput = document.querySelector("#title").value;
@@ -199,7 +192,6 @@ function handleElementFormSubmit(evt) {
 
     element.generateCard();
 
-    //element.trashCan(userData._id, data.owner._id);
     element.trashCan(userData, data.owner._id);
 
     popupFormCreate.close();
